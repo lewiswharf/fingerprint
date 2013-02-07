@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension status="released" id="fingerprint" xmlns="http://symphony-cms.com/schemas/extension/1.0">
+	<name>Fingerprint</name>
+	<description>Create a fingerprint of the hidden inputs for a given form.</description>
+	<types>
+		<type>Other</type>
+		<type>Event</type>
+	</types>
+	<authors>
+		<author>
+			<name github="lewiswharf" symphony="Lewis">Mark Lewis</name>
+			<email>mark@delewis.com</email>
+			<website>http://www.delewis.com</website>
+		</author>
+	</authors>
+	<releases>
+		<release version="1.0" date="2013-01-19" min="2.3">
+            - Initial release.
+        </release>
+	</releases>
+</extension>
