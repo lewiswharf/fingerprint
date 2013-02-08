@@ -9,6 +9,10 @@ Fingerprint works with Symphony section events. Custom events that do not invoke
 1. Enable the extension.
 2. Set a long and random secret under Preferences.
 
+If the fingerprint upon form submission fails to match the fingerprint created at page creation, the filter messages array will be populated and cause the event to fail.
+
+    <filter name="fingerprint" status="failed">Fingerprint does not match.</filter>
+
 *Note: hidden input values must be generated via XSLT. Hidden inputs added or changed with JavaScript will cause the event to fail.*
 
 ## Example Use Cases
