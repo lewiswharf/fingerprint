@@ -52,7 +52,7 @@ class Extension_Fingerprint extends Extension {
             $s = & $_SESSION[__SYM_COOKIE_PREFIX_ . 'fingerprint'];
 
             $s['fields'] = serialize($fields);
-            $s['token'] = sha1($values . Symphony::Configuration()->get('secret', 'fingerprint'));
+            $s['token'] = hash_hmac("sha1", $values, Symphony::Configuration()->get('secret', 'fingerprint'));
         }
     }
 
@@ -65,7 +65,7 @@ class Extension_Fingerprint extends Extension {
             $values .= $this->getPostValueFromName($field);
         }
 
-        if ($s['token'] == sha1($values . Symphony::Configuration()->get('secret', 'fingerprint')))
+        if ($s['token'] == hash_hmac("sha1", $values, Symphony::Configuration()->get('secret', 'fingerprint')))
             return true;
         else
             $context['messages'][] = array('fingerprint', false, __('Fingerprint does not match.'));
