@@ -49,7 +49,6 @@ class Extension_Fingerprint extends Extension {
                 $fields[] = $input->getAttribute('name');
                 $values .= $input->getAttribute('value');
             }
-            if ($values == '') return true;
 
             $s = & $_SESSION[FINGERPRINT];
 
@@ -59,9 +58,8 @@ class Extension_Fingerprint extends Extension {
     }
 
     public function eventPreSaveFilter($context) {
-        if (!isset($_SESSION[FINGERPRINT])) return true;
-
         $s = & $_SESSION[FINGERPRINT];
+
         $fields = unserialize($s['fields']);
         foreach ($fields as $field) {
             $values .= $this->getPostValueFromName($field);
