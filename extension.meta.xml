@@ -14,6 +14,11 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="1.01" date="2013-02-08" min="2.3">
+            - Use HMAC instead of shal to create fingerprint.
+            - Changed behavior of fingerprint creation. Always create/check fingerprint, fall back to hash of secret in preferences.
+            - Cleaned up session name.
+        </release>
 		<release version="1.0" date="2013-02-07" min="2.3">
             - Initial release.
         </release>
