@@ -1,5 +1,7 @@
 <?php
 
+define('FINGERPRINT', 'symphony-fingerprint');
+
 class Extension_Fingerprint extends Extension {
 
     /*-------------------------------------------------------------------------
@@ -47,9 +49,8 @@ class Extension_Fingerprint extends Extension {
                 $fields[] = $input->getAttribute('name');
                 $values .= $input->getAttribute('value');
             }
-            if ($values == '') return true;
 
-            $s = & $_SESSION[__SYM_COOKIE_PREFIX_ . 'fingerprint'];
+            $s = & $_SESSION[FINGERPRINT];
 
             $s['fields'] = serialize($fields);
             $s['token'] = hash_hmac("sha1", $values, Symphony::Configuration()->get('secret', 'fingerprint'));
@@ -57,9 +58,8 @@ class Extension_Fingerprint extends Extension {
     }
 
     public function eventPreSaveFilter($context) {
-        if (!isset($_SESSION[__SYM_COOKIE_PREFIX_ . 'fingerprint'])) return true;
+        $s = & $_SESSION[FINGERPRINT];
 
-        $s = & $_SESSION[__SYM_COOKIE_PREFIX_ . 'fingerprint'];
         $fields = unserialize($s['fields']);
         foreach ($fields as $field) {
             $values .= $this->getPostValueFromName($field);
@@ -70,7 +70,7 @@ class Extension_Fingerprint extends Extension {
         else
             $context['messages'][] = array('fingerprint', false, __('Fingerprint does not match.'));
 
-        unset($_SESSION[__SYM_COOKIE_PREFIX_ . 'fingerprint']);
+        unset($_SESSION[FINGERPRINT]);
     }
 
     public function getPostValueFromName($name) {
