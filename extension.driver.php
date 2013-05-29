@@ -38,10 +38,12 @@ class Extension_Fingerprint extends Extension {
     -------------------------------------------------------------------------*/
 
     public function actionCreateFingerprint($context) {
+        if($this->isException()) return true;
+
         $doc = new DOMDocument;
         // Suppress warning
         if (@!$doc->loadHTML($context['output'])) {
-            Administration::instance()->customError(__('Error creating fingerprint'), __('Page could not be read to create fingerprint.'));
+            Frontend::instance()->customError(__('Error creating fingerprint'), __('Page could not be read to create fingerprint.'));
         } else {
             $xpath = new DOMXpath($doc);
             $fields = array();
@@ -58,11 +60,15 @@ class Extension_Fingerprint extends Extension {
     }
 
     public function eventPreSaveFilter($context) {
+        if($this->isException()) return true;
+
         $s = & $_SESSION[FINGERPRINT];
 
         $fields = unserialize($s['fields']);
-        foreach ($fields as $field) {
-            $values .= $this->getPostValueFromName($field);
+        if(is_array($fields)) {
+            foreach ($fields as $field) {
+                $values .= $this->getPostValueFromName($field);
+            }
         }
 
         if ($s['token'] == hash_hmac("sha1", $values, Symphony::Configuration()->get('secret', 'fingerprint')))
@@ -85,6 +91,17 @@ class Extension_Fingerprint extends Extension {
         } else {
             return $_POST[$parts[0]];
         }
+    }
+
+    public function isException() {
+        $params = Frontend::instance()->Page()->Params();
+
+        if(is_array($params)) {
+            foreach ($params['page-types'] as $type) {
+                if($type == 'no-fingerprint') return true;
+            }
+        }
+        return false;
     }
 
     public function addCustomPreferenceFieldsets($context) {
